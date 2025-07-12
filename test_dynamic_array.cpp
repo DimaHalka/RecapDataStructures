@@ -61,3 +61,26 @@ TEST(dynamic_array_test, const_operator) {
     EXPECT_EQ(const_ref[1], 2);
     EXPECT_EQ(const_ref[2], 3);
 }
+
+TEST(dynamic_array_test, ctor_copy) {
+    dynamic_array<int> original;
+    original.push_back(10);
+    original.push_back(20);
+    original.push_back(30);
+
+    dynamic_array<int> copy = original;
+
+    // Verify size and capacity
+    EXPECT_EQ(copy.size(), original.size());
+    EXPECT_EQ(copy.capacity(), original.capacity());
+
+    // Verify elements
+    for (std::size_t i = 0; i < copy.size(); ++i) {
+        EXPECT_EQ(copy[i], original[i]);
+    }
+
+    // Modify original and check copy is unaffected (deep copy)
+    original[1] = 99;
+    EXPECT_EQ(copy[1], 20);  // Copy should remain unchanged
+}
+

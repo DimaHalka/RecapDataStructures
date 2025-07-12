@@ -15,6 +15,14 @@ public:
     ~dynamic_array() noexcept {
         delete[] mp_data;
     }
+    
+    dynamic_array(const dynamic_array& other)
+        : m_size(other.m_size)
+        , m_capacity(other.m_capacity)
+        , mp_data(new T[other.m_capacity])
+    {
+        std::copy(other.mp_data, other.mp_data + m_size, mp_data);
+    }
 
     std::size_t size() const noexcept {
         return m_size;
@@ -24,10 +32,10 @@ public:
         return m_capacity;
     }
     
-    void push_back(const T& obj) {
+    void push_back(const T& object) {
         if (m_size == m_capacity)
             reallocate();
-        mp_data[m_size++] = obj;
+        mp_data[m_size++] = object;
     }
     
     const T& at(std::size_t idx) const {
