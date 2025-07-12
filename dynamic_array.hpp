@@ -23,6 +23,17 @@ public:
     {
         std::copy(other.mp_data, other.mp_data + m_size, mp_data);
     }
+    
+    dynamic_array& operator=(const dynamic_array& other) {
+        // exception safety: new T[m_capacity] or std::copy(...) may throw
+        if (this != &other) {
+            dynamic_array temp(other);  // may throw, but leaves *this untouched
+            std::swap(mp_data, temp.mp_data);
+            std::swap(m_size, temp.m_size);
+            std::swap(m_capacity, temp.m_capacity);
+        }
+        return *this;
+    }
 
     std::size_t size() const noexcept {
         return m_size;
@@ -39,19 +50,19 @@ public:
     }
     
     const T& at(std::size_t idx) const {
-        // Like standard containers, check for out of bounds
+        // like standard containers, check for out of bounds
         if (idx >= m_size)
             throw std::out_of_range("dynamic_array::at - index out of range");
         return mp_data[idx];
     }
     
     const T& operator[](std::size_t idx) const noexcept {
-        // Like standard containers, no bounds check
+        // like standard containers, no bounds check
         return mp_data[idx];
     }
 
     T& operator[](std::size_t idx) noexcept {
-        // Like standard containers, no bounds check
+        // like standard containers, no bounds check
         return mp_data[idx];
     }
 

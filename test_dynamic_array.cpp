@@ -84,3 +84,42 @@ TEST(dynamic_array_test, ctor_copy) {
     EXPECT_EQ(copy[1], 20);  // Copy should remain unchanged
 }
 
+TEST(dynamic_array_test, assignment_operator) {
+    dynamic_array<int> source;
+    source.push_back(1);
+    source.push_back(2);
+    source.push_back(3);
+
+    dynamic_array<int> target;
+    target.push_back(100);  // start with some different content
+    target.push_back(200);
+
+    target = source;  // perform copy assignment
+
+    // Check size and capacity
+    EXPECT_EQ(target.size(), source.size());
+    EXPECT_EQ(target.capacity(), source.capacity());
+
+    // Check elements
+    for (std::size_t i = 0; i < source.size(); ++i) {
+        EXPECT_EQ(target[i], source[i]);
+    }
+
+    // Modify source, verify target is unaffected
+    source[1] = 999;
+    EXPECT_EQ(target[1], 2);  // unchanged
+}
+
+TEST(dynamic_array_test, assignment_operator_self) {
+    dynamic_array<int> arr;
+    arr.push_back(5);
+    arr.push_back(10);
+
+    // Assign to itself
+    arr = arr;
+
+    // Still the same
+    EXPECT_EQ(arr.size(), 2);
+    EXPECT_EQ(arr[0], 5);
+    EXPECT_EQ(arr[1], 10);
+}
