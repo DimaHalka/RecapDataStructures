@@ -8,10 +8,9 @@ project(RecapDataStructures)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Shared library: data_structures
-add_library(data_structures SHARED
-    dynamic_array.cpp
-    dynamic_array.h
+# Library data_structures
+add_library(data_structures INTERFACE
+    dynamic_array.hpp
 )
 
 # Executable: cli
