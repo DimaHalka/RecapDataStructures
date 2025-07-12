@@ -34,3 +34,30 @@ TEST(dynamic_array_test, push_back_at) {
     EXPECT_THROW(a.at(1), std::out_of_range);
 }
 
+TEST(dynamic_array_test, non_const_operator) {
+    dynamic_array<int> arr;
+    arr.push_back(10);
+    arr.push_back(20);
+    arr.push_back(30);
+
+    EXPECT_EQ(arr[0], 10);
+    EXPECT_EQ(arr[1], 20);
+    EXPECT_EQ(arr[2], 30);
+
+    // Modify via non-const operator[]
+    arr[1] = 99;
+    EXPECT_EQ(arr[1], 99);
+}
+
+TEST(dynamic_array_test, const_operator) {
+    dynamic_array<int> arr;
+    arr.push_back(1);
+    arr.push_back(2);
+    arr.push_back(3);
+
+    const dynamic_array<int>& const_ref = arr;
+
+    EXPECT_EQ(const_ref[0], 1);
+    EXPECT_EQ(const_ref[1], 2);
+    EXPECT_EQ(const_ref[2], 3);
+}

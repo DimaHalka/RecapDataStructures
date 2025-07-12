@@ -12,15 +12,15 @@ public:
     {
     }
     
-    ~dynamic_array() {
+    ~dynamic_array() noexcept {
         delete[] mp_data;
     }
 
-    std::size_t size() const {
+    std::size_t size() const noexcept {
         return m_size;
     }
     
-    std::size_t capacity() const {
+    std::size_t capacity() const noexcept {
         return m_capacity;
     }
     
@@ -31,15 +31,26 @@ public:
     }
     
     const T& at(std::size_t idx) const {
+        // Like standard containers, check for out of bounds
         if (idx >= m_size)
             throw std::out_of_range("dynamic_array::at - index out of range");
+        return mp_data[idx];
+    }
+    
+    const T& operator[](std::size_t idx) const noexcept {
+        // Like standard containers, no bounds check
+        return mp_data[idx];
+    }
+
+    T& operator[](std::size_t idx) noexcept {
+        // Like standard containers, no bounds check
         return mp_data[idx];
     }
 
 private:
     void reallocate() {
-        // Exception safety: new T[m_capacity] or T::operator= may throw
-        // So allocate the new data and swap
+        // exception safety: new T[m_capacity] or T::operator= may throw
+        // so allocate the new data, once succeeded - swap
         std::size_t new_capacity = m_capacity * 2;
         T* p_new_data = new T[new_capacity];
 
@@ -47,7 +58,7 @@ private:
             p_new_data[i] = std::move(mp_data[i]);
         }
 
-        // Allocation was OK, we can safely swap now
+        // allocation was OK, we can safely swap now
         std::swap(mp_data, p_new_data);
         m_capacity = new_capacity;
 
