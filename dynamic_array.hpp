@@ -49,6 +49,16 @@ public:
         mp_data[m_size++] = object;
     }
     
+    void pop_back() {
+        if (m_size == 0)
+            throw std::out_of_range("dynamic_array::pop - container empty");
+        
+        m_size--;
+        
+        // delete &mp_data[m_size]; is undefined behavior for array elements
+        mp_data[m_size].~T();
+    }
+
     const T& at(std::size_t idx) const {
         // like standard containers, check for out of bounds
         if (idx >= m_size)

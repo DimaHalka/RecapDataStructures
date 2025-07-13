@@ -123,3 +123,29 @@ TEST(dynamic_array_test, assignment_operator_self) {
     EXPECT_EQ(arr[0], 5);
     EXPECT_EQ(arr[1], 10);
 }
+
+TEST(dynamic_array_test, remove_last_element) {
+    dynamic_array<std::string> arr;
+    arr.push_back("A");
+    arr.push_back("B");
+    arr.push_back("C");
+
+    EXPECT_EQ(arr.size(), 3);
+    EXPECT_EQ(arr[2], "C");
+
+    arr.pop_back();
+    EXPECT_EQ(arr.size(), 2);
+    EXPECT_EQ(arr[1], "B");
+}
+
+TEST(dynamic_array_test, throw_on_empty) {
+    dynamic_array<int> arr;
+
+    EXPECT_THROW(arr.pop_back(), std::out_of_range);
+
+    arr.push_back(1);
+    arr.pop_back();
+
+    EXPECT_THROW(arr.pop_back(), std::out_of_range);
+}
+
