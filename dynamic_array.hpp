@@ -24,6 +24,16 @@ public:
         std::copy(other.mp_data, other.mp_data + m_size, mp_data);
     }
     
+    dynamic_array(dynamic_array&& other) noexcept
+        : mp_data(other.mp_data)
+        , m_size(other.m_size)
+        , m_capacity(other.m_capacity)
+    {
+        other.mp_data = nullptr;
+        other.m_size = 0;
+        other.m_capacity = 0;
+    }
+    
     dynamic_array& operator=(const dynamic_array& other) {
         // exception safety: new T[m_capacity] or std::copy(...) may throw
         if (this != &other) {
@@ -31,6 +41,21 @@ public:
             std::swap(mp_data, temp.mp_data);
             std::swap(m_size, temp.m_size);
             std::swap(m_capacity, temp.m_capacity);
+        }
+        return *this;
+    }
+
+    dynamic_array& operator=(dynamic_array&& other) noexcept {
+        if (this != &other) {
+            delete[] mp_data;  
+
+            mp_data = other.mp_data;
+            m_size = other.m_size;
+            m_capacity = other.m_capacity;
+
+            other.mp_data = nullptr;
+            other.m_size = 0;
+            other.m_capacity = 0;
         }
         return *this;
     }
@@ -45,18 +70,23 @@ public:
     
     void push_back(const T& object) {
         if (m_size == m_capacity)
-            reallocate();
+            reallocate(m_capacity*2);
+        
         mp_data[m_size++] = object;
     }
     
     void pop_back() {
         if (m_size == 0)
             throw std::out_of_range("dynamic_array::pop - container empty");
-        
+                
         m_size--;
         
         // delete &mp_data[m_size]; is undefined behavior for array elements
         mp_data[m_size].~T();
+
+        if (m_size < m_capacity / 4 && m_capacity > 2) {
+            reallocate(m_size > 1 ? m_size * 2 : 2);
+        }
     }
 
     const T& at(std::size_t idx) const {
@@ -77,10 +107,9 @@ public:
     }
 
 private:
-    void reallocate() {
-        // exception safety: new T[m_capacity] or T::operator= may throw
+    void reallocate(std::size_t new_capacity) {
+        // exception safety: new T[new_capacity] or T::operator= may throw
         // so allocate the new data, once succeeded - swap
-        std::size_t new_capacity = m_capacity * 2;
         T* p_new_data = new T[new_capacity];
 
         for (std::size_t i = 0; i < m_size; ++i) {
@@ -88,10 +117,11 @@ private:
         }
 
         // allocation was OK, we can safely swap now
+        T* p_old_data = mp_data;
         std::swap(mp_data, p_new_data);
         m_capacity = new_capacity;
 
-        delete[] p_new_data;
+        delete[] p_old_data;
     }
     
 private:

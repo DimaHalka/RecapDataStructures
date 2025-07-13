@@ -149,3 +149,33 @@ TEST(dynamic_array_test, throw_on_empty) {
     EXPECT_THROW(arr.pop_back(), std::out_of_range);
 }
 
+TEST(dynamic_array_test, ctor_move) {
+    dynamic_array<int> src;
+    src.push_back(1);
+    src.push_back(2);
+
+    dynamic_array<int> moved(std::move(src));
+
+    EXPECT_EQ(moved.size(), 2);
+    EXPECT_EQ(moved[0], 1);
+    EXPECT_EQ(moved[1], 2);
+    EXPECT_EQ(src.size(), 0); // source was cleared
+}
+
+TEST(dynamic_array_test, move_assignment_operator) {
+    dynamic_array<int> src;
+    src.push_back(10);
+    src.push_back(20);
+
+    dynamic_array<int> dst;
+    dst.push_back(99);  // old content
+
+    dst = std::move(src);
+
+    EXPECT_EQ(dst.size(), 2);
+    EXPECT_EQ(dst[0], 10);
+    EXPECT_EQ(dst[1], 20);
+    EXPECT_EQ(src.size(), 0);
+}
+
+
