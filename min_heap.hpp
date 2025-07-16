@@ -24,6 +24,12 @@
 template<typename T>
 class min_heap {
 public:
+    const T& peek_min() const {
+        if (m_data.size() == 0)
+            throw std::runtime_error("min_heap::peek_min - container empty");
+        return m_data[0];
+    }
+    
     T extract_min() {
         if(m_data.size() == 0)
             throw std::runtime_error("min_heap::extract_min - container empty");
@@ -43,6 +49,10 @@ public:
     
     std::size_t size() const {
         return m_data.size();
+    }
+    
+    bool empty() const noexcept {
+        return m_data.size() == 0;
     }
     
 private:
