@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef> // std::size_t
+#include <sstream>
 
 template<typename T>
 class dynamic_array {
@@ -129,3 +130,14 @@ private:
     std::size_t m_size;
     std::size_t m_capacity;
 };
+
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const dynamic_array<T>& arr) {
+    os << "[ ";
+    for (std::size_t i = 0; i < arr.size(); ++i) {
+        os << arr[i];
+        if (i + 1 != arr.size()) os << ", ";
+    }
+    os << " ]";
+    return os;
+}
