@@ -24,6 +24,14 @@
 template<typename T>
 class min_heap {
 public:
+    // just as a documentation
+    min_heap() = default;
+    min_heap(const min_heap&) = default;
+    min_heap(min_heap&&) noexcept = default;
+    min_heap& operator=(const min_heap&) = default;
+    min_heap& operator=(min_heap&&) noexcept = default;
+    ~min_heap() = default;
+    
     const T& peek_min() const {
         if (m_data.size() == 0)
             throw std::runtime_error("min_heap::peek_min - container empty");
