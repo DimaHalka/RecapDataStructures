@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Library data_structures
 add_library(data_structures INTERFACE
     dynamic_array.hpp
+    linked_list.hpp
     min_heap.hpp
 )
 
@@ -25,6 +26,7 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 add_executable(unit_tests
     test_dynamic_array.cpp
+    test_linked_list.cpp
     test_min_heap.cpp
 )
 target_link_libraries(unit_tests
