@@ -36,6 +36,19 @@ public:
         return mp_tail->m_obj;
     }
     
+    void push_front(const T& obj){
+        auto* p_new_node = new node(obj);
+        if(!mp_head) {
+            mp_head = mp_tail = p_new_node;
+        }
+        else {
+            auto* p_old_head = mp_head;
+            mp_head = p_new_node;
+            mp_head->mp_next = p_old_head;
+        }
+        m_size++;
+    }
+    
     void push_back(const T& obj){
         auto* p_new_node = new node(obj);
         if(!mp_head) {
