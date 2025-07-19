@@ -20,6 +20,22 @@ public:
         
     }
     
+    T front() const {
+        if(!mp_head) {
+            throw std::runtime_error("linked_list::front - list empty");
+        }
+        
+        return mp_head->m_obj;
+    }
+
+    T back() const {
+        if(!mp_tail) {
+            throw std::runtime_error("linked_list::back - list empty");
+        }
+        
+        return mp_tail->m_obj;
+    }
+    
     void push_back(const T& obj){
         auto* p_new_node = new node(obj);
         if(!mp_head) {
@@ -32,10 +48,31 @@ public:
         m_size++;
     }
     
+    void pop_front() {
+        if(!mp_head) {
+            throw std::runtime_error("linked_list::pop_front - list empty");
+        }
+        else if(mp_head && m_size == 1) {
+            delete mp_head;
+            mp_head = mp_tail = nullptr;
+            m_size = 0;
+        }
+        else {
+            auto* p_new_head = mp_head->mp_next;
+            delete mp_head;
+            mp_head = p_new_head;
+            m_size--;
+        }
+    }
+    
     std::size_t size() const noexcept {
         return m_size;
     }
     
+    bool empty() const noexcept {
+        return m_size == 0;
+    }
+
     class iterator {
     public:
         explicit iterator(node* p_node)
