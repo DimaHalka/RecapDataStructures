@@ -2,22 +2,22 @@
 
 template <typename T>
 class linked_list {
-    struct node{
-        node(const T& obj)
-            : mp_next(nullptr)
-            , m_obj(obj) {
-        }
-        
-        node* mp_next;
-        T m_obj;
-    };
+    struct node;
     
 public:
     linked_list()
         : mp_head(nullptr)
         , mp_tail(nullptr)
         , m_size(0) {
-        
+    }
+    
+    ~linked_list() {
+        auto* p = mp_head;
+        while(p) {
+            auto* p_next = p->mp_next;
+            delete p;
+            p = p_next;
+        }
     }
     
     T front() const {
@@ -143,6 +143,16 @@ private:
     node* mp_head;
     node* mp_tail;
     std::size_t m_size;
+    
+    struct node{
+        node(const T& obj)
+            : mp_next(nullptr)
+            , m_obj(obj) {
+        }
+        
+        node* mp_next;
+        T m_obj;
+    };
 };
 
 template <typename T>
