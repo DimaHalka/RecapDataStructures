@@ -20,6 +20,18 @@ public:
         }
     }
     
+    linked_list(const linked_list& other) {
+        mp_head = mp_tail = nullptr;
+        m_size = 0;
+        if(!other.empty()) {
+            auto* p = other.mp_head;
+            while(p) {
+                push_back(p->m_obj);
+                p = p->mp_next;
+            }
+        }
+    }
+    
     T front() const {
         if(!mp_head) {
             throw std::runtime_error("linked_list::front - list empty");

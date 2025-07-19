@@ -13,6 +13,18 @@ TEST(linked_list, empty) {
     EXPECT_THROW(ll.pop_front(), std::runtime_error);
 }
 
+TEST(linked_list, copy_ctor) {
+    linked_list<int> ll;
+    ll.push_back(42);
+    ll.push_back(99);
+    ll.push_back(14);
+    
+    linked_list<int> copy(ll);
+    EXPECT_EQ(copy.size(), 3);
+    EXPECT_EQ(copy.front(), 42);
+    EXPECT_EQ(copy.back(), 14);
+}
+
 TEST(linked_list, size) {
     linked_list<int> ll;
     ll.push_back(42);
