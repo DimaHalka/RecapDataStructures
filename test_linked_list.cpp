@@ -61,3 +61,17 @@ TEST(linked_list, pop_front) {
     ll.pop_front();
     EXPECT_THROW(ll.pop_front(), std::runtime_error);    
 }
+
+TEST(linked_list, pop_back) {
+    linked_list<int> ll;
+    ll.push_back(42);
+    ll.push_back(99);
+    ll.push_back(14);
+    EXPECT_EQ(ll.back(), 14);
+    ll.pop_back();
+    EXPECT_EQ(ll.back(), 99);
+    ll.pop_back();
+    EXPECT_EQ(ll.back(), 42);
+    ll.pop_back();
+    EXPECT_THROW(ll.pop_back(), std::runtime_error);
+}

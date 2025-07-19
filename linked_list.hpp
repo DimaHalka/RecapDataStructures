@@ -78,6 +78,28 @@ public:
         }
     }
     
+    void pop_back() {
+        if(!mp_tail) {
+            throw std::runtime_error("linked_list::pop_back - list empty");
+        }
+        else if(mp_tail && m_size == 1) {
+            delete mp_tail;
+            mp_head = mp_tail = nullptr;
+            m_size = 0;
+        }
+        else {
+            node* p_new_tail = mp_head;
+            while(true) {
+                if(p_new_tail->mp_next == mp_tail)
+                    break;
+                p_new_tail = p_new_tail->mp_next;
+            }
+            delete mp_tail;
+            mp_tail = p_new_tail;
+            m_size--;
+        }
+    }
+    
     std::size_t size() const noexcept {
         return m_size;
     }
@@ -107,7 +129,7 @@ public:
         
     private:
         node* mp_node;
-    };
+    }; // end of class iterator
     
     iterator begin(){
         return iterator(mp_head);
