@@ -23,7 +23,7 @@ public:
     
     const T& top() const {
         if(empty()) {
-            throw std::runtime_error("stack::peek - stack empty");
+            throw std::runtime_error("stack::top - stack empty");
         }
         
         return m_data.front();
