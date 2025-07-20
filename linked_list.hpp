@@ -6,18 +6,13 @@ class linked_list {
     
 public:
     linked_list()
-        : mp_head(nullptr)
-        , mp_tail(nullptr)
-        , m_size(0) {
+    : mp_head(nullptr)
+    , mp_tail(nullptr)
+    , m_size(0) {
     }
     
     ~linked_list() {
-        auto* p = mp_head;
-        while(p) {
-            auto* p_next = p->mp_next;
-            delete p;
-            p = p_next;
-        }
+        _free();
     }
     
     linked_list(const linked_list& other) {
@@ -32,15 +27,46 @@ public:
         }
     }
     
-    T front() const {
+    linked_list(linked_list&& other)
+    : mp_head(other.mp_head)
+    , mp_tail(other.mp_tail)
+    , m_size(other.m_size)
+    {
+        other.mp_head = other.mp_tail = nullptr;
+        other.m_size = 0;
+    }
+    
+    linked_list& operator=(const linked_list& other) {
+        if(this != &other){
+            linked_list tmp(other); // may throw, but leaves *this untouched
+            std::swap(tmp.mp_head, mp_head);
+            std::swap(tmp.mp_tail, mp_tail);
+            std::swap(tmp.m_size, m_size);
+        }
+        return *this;
+    }
+    
+    linked_list& operator=(linked_list&& other) {
+        if(this != &other){
+            _free();
+            mp_head = other.mp_head;
+            mp_tail = other.mp_tail;
+            m_size = other.m_size;
+            other.mp_head = other.mp_tail = nullptr;
+            other.m_size = 0;
+        }
+        return *this;
+    }
+    
+    const T& front() const {
         if(!mp_head) {
             throw std::runtime_error("linked_list::front - list empty");
         }
         
         return mp_head->m_obj;
     }
-
-    T back() const {
+    
+    const T& back() const {
         if(!mp_tail) {
             throw std::runtime_error("linked_list::back - list empty");
         }
@@ -119,11 +145,15 @@ public:
     bool empty() const noexcept {
         return m_size == 0;
     }
-
+    
+    void clear() {
+        _free();
+    }
+    
     class iterator {
     public:
         explicit iterator(node* p_node)
-            : mp_node(p_node) {
+        : mp_node(p_node) {
         }
         
         T& operator* () {
@@ -146,15 +176,26 @@ public:
     iterator begin(){
         return iterator(mp_head);
     }
-
+    
     iterator end(){
         return iterator(nullptr);
     }
-
+    
 private:
     node* mp_head;
     node* mp_tail;
     std::size_t m_size;
+    
+    void _free() {
+        auto* p = mp_head;
+        while(p) {
+            auto* p_next = p->mp_next;
+            delete p;
+            p = p_next;
+        }
+        mp_head = mp_tail = nullptr;
+        m_size = 0;
+    }
     
     struct node{
         node(const T& obj)
@@ -171,11 +212,11 @@ template <typename T>
 std::ostream& operator<<(std::ostream& os, linked_list<T>& ll) {
     os << "[ ";
     
-    int i = 0;
+    bool first = true;
     for (auto it = ll.begin(); it != ll.end(); ++it) {
+        if (!first) os << ", ";
         os << *it;
-        if (i + 1 != ll.size()) os << ", ";
-        i++;
+        first = false;
     }
     
     os << " ]";
