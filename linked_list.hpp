@@ -99,14 +99,18 @@ public:
         m_size++;
     }
     
-    void pop_front() {
+    T pop_front() {
         if(!mp_head) {
             throw std::runtime_error("linked_list::pop_front - list empty");
         }
-        else if(mp_head && m_size == 1) {
+        
+        T value = std::move(mp_head->m_obj);
+        
+        if(m_size == 1) {
             delete mp_head;
             mp_head = mp_tail = nullptr;
             m_size = 0;
+            
         }
         else {
             auto* p_new_head = mp_head->mp_next;
@@ -114,13 +118,18 @@ public:
             mp_head = p_new_head;
             m_size--;
         }
+        
+        return value;
     }
     
-    void pop_back() {
+    T pop_back() {
         if(!mp_tail) {
             throw std::runtime_error("linked_list::pop_back - list empty");
         }
-        else if(mp_tail && m_size == 1) {
+        
+        T value = std::move(mp_tail->m_obj);
+        
+        if(m_size == 1) {
             delete mp_tail;
             mp_head = mp_tail = nullptr;
             m_size = 0;
@@ -136,6 +145,8 @@ public:
             mp_tail = p_new_tail;
             m_size--;
         }
+        
+        return value;
     }
     
     std::size_t size() const noexcept {

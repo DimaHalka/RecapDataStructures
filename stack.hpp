@@ -14,16 +14,14 @@ public:
             throw std::runtime_error("stack::pop - stack empty");
         }
         
-        auto object = m_data.front();
-        m_data.pop_front();
-        return object;
+        return m_data.pop_front();
     }
     
     std::size_t size() const noexcept {
         return m_data.size();
     }
     
-    std::size_t empty() const noexcept {
+    bool empty() const noexcept {
         return m_data.empty();
     }
 
