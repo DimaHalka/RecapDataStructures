@@ -40,3 +40,13 @@ TEST(stack_test, pop) {
     
     EXPECT_THROW(ss.pop(), std::runtime_error);
 }
+
+TEST(stack_test, top) {
+    stack<int> ss;
+    ss.push(42);
+    EXPECT_EQ(ss.top(), 42);
+    ss.push(99);
+    EXPECT_EQ(ss.top(), 99);
+    ss.push(14);
+    EXPECT_EQ(ss.top(), 14);
+}
