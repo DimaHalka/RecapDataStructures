@@ -10,6 +10,7 @@ add_library(data_structures INTERFACE
     dynamic_array.hpp
     linked_list.hpp
     min_heap.hpp
+    stack.hpp
 )
 
 # GoogleTest 
@@ -28,6 +29,7 @@ add_executable(unit_tests
     test_dynamic_array.cpp
     test_linked_list.cpp
     test_min_heap.cpp
+    test_stack.cpp
 )
 target_link_libraries(unit_tests
     GTest::gtest_main
