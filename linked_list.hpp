@@ -192,6 +192,37 @@ public:
         return iterator(nullptr);
     }
     
+    class const_iterator {
+    public:
+        explicit const_iterator(node* p_node)
+        : mp_node(p_node) {
+        }
+        
+        const T& operator* () {
+            return mp_node->m_obj;
+        }
+        
+        const_iterator& operator++() {
+            mp_node = mp_node->mp_next;
+            return *this;
+        }
+        
+        bool operator!=(const const_iterator& other) const {
+            return mp_node != other.mp_node;
+        }
+        
+    private:
+        node* mp_node;
+    }; // end of class iterator
+
+    const_iterator begin() const {
+        return const_iterator(mp_head);
+    }
+    
+    const_iterator end() const {
+        return const_iterator(nullptr);
+    }
+
 private:
     node* mp_head;
     node* mp_tail;
