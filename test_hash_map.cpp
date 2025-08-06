@@ -8,6 +8,7 @@ TEST(hash_map_test, empty) {
 
 TEST(hash_map_test, insert_get) {
     hash_map<std::string, int> hm;
-    // hm.insert("Dmytro Halka", 5433549);
-    // EXPECT_EQ(hm.get("Dmytro Halka"), 5433549);
+    hm.insert("Dmytro Halka", 5433549);
+    EXPECT_EQ(hm.get("Dmytro Halka"), 5433549);
+    EXPECT_THROW(hm.get("John Dow"), std::runtime_error);
 }
