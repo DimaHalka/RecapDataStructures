@@ -71,7 +71,7 @@ public:
     
     void push_back(const T& object) {
         if (m_size == m_capacity)
-            reallocate(m_capacity*2);
+            _reallocate(m_capacity*2);
         
         mp_data[m_size++] = object;
     }
@@ -85,9 +85,7 @@ public:
         // delete &mp_data[m_size]; is undefined behavior for array elements
         mp_data[m_size].~T();
 
-        if (m_size < m_capacity / 4 && m_capacity > 2) {
-            reallocate(m_size > 1 ? m_size * 2 : 2);
-        }
+        _shrink();
     }
 
     const T& at(std::size_t idx) const {
@@ -107,8 +105,25 @@ public:
         return mp_data[idx];
     }
 
+    void resize(std::size_t new_size) {
+        if(new_size < m_size) {
+            for(std::size_t i = new_size; i < m_size; ++i) {
+                mp_data[i].~T();
+            }
+            _shrink();
+        }
+        else if(new_size > m_size) {
+            if (new_size >= m_capacity)
+                _reallocate(new_size*2);
+            for(std::size_t i = m_size; i < new_size; ++i) {
+                mp_data[i] = {};
+            }
+        }
+        m_size = new_size;
+    }
+    
 private:
-    void reallocate(std::size_t new_capacity) {
+    void _reallocate(std::size_t new_capacity) {
         // exception safety: new T[new_capacity] or T::operator= may throw
         // so allocate the new data, once succeeded - swap
         T* p_new_data = new T[new_capacity];
@@ -123,6 +138,12 @@ private:
         m_capacity = new_capacity;
 
         delete[] p_old_data;
+    }
+    
+    void _shrink() {
+        if (m_size < m_capacity / 4 && m_capacity > 2) {
+            _reallocate(m_size > 1 ? m_size * 2 : 2);
+        }
     }
     
 private:

@@ -178,4 +178,43 @@ TEST(dynamic_array_test, move_assignment_operator) {
     EXPECT_EQ(src.size(), 0);
 }
 
+TEST(dynamic_array_test, resize_same_size) {
+    dynamic_array<int> arr;
+    arr.push_back(10);
+    arr.push_back(20);
+
+    // same size, expect no effect
+    arr.resize(2);
+    EXPECT_EQ(arr.size(), 2);
+    EXPECT_EQ(arr[0], 10);
+    EXPECT_EQ(arr[1], 20);
+}
+
+TEST(dynamic_array_test, resize_shrink) {
+    dynamic_array<int> arr;
+    for(int i = 0; i<128; ++i)
+        arr.push_back(i);
+    
+    arr.resize(64);
+    EXPECT_EQ(arr.size(), 64);
+    for(int i = 0; i<64; ++i)
+        EXPECT_EQ(arr[i], i);
+    EXPECT_THROW(arr.at(64), std::out_of_range);
+    EXPECT_THROW(arr.at(65), std::out_of_range);
+    EXPECT_THROW(arr.at(127), std::out_of_range);
+}
+
+TEST(dynamic_array_test, resize_grow) {
+    dynamic_array<int> arr;
+    for(int i = 0; i<64; ++i)
+        arr.push_back(i);
+    
+    arr.resize(128);
+    EXPECT_EQ(arr.size(), 128);
+    for(int i = 0; i<64; ++i)
+        EXPECT_EQ(arr[i], i);
+    for(int i = 64; i<128; ++i)
+        EXPECT_EQ(arr[i], 0);
+}
+
 
