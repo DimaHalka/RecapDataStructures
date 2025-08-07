@@ -21,7 +21,7 @@ public:
         if(m_size + 1 > m_load_factor * m_buckets.size())
             _rehash();
             
-        if(_insert(m_buckets, std::move(key), std::move(value)))
+        if(_insert(m_buckets, key, value))
             m_size++;
     }
     
@@ -38,7 +38,7 @@ public:
 private:
     using bucket = linked_list<pair<Key, Value>>;
 
-     std::size_t _hash(Key key) const {
+     std::size_t _hash(const Key& key) const {
         return std::hash<Key>{}(key);
     }
     
