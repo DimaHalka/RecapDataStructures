@@ -8,19 +8,31 @@ template<typename Key, typename Value>
 class hash_map {
 public:
     hash_map()
-        : m_size(8)
+        : m_buckets(8)
+        , m_size(0)
         , m_load_factor(0.75) {
-        m_data.resize(m_size);
+        m_data.resize(m_buckets);
+    }
+    
+    std::size_t size() const noexcept {
+        return m_size;
     }
     
     void insert(const Key& key, const Value& value) {
-        std::size_t idx = hash(key) % m_size;
+        std::size_t idx = hash(key) % m_buckets;
         bucket& buck = m_data[idx];
-        buck.push_back(make_pair(key, value));
+        for(auto it=buck.begin(); it!=buck.end(); ++it){
+            if((*it).first() == key) {
+                (*it).second() = value; // update existing
+                return;
+            }
+        }
+        buck.push_back(make_pair(key, value)); // insert new
+        m_size++;
     }
     
     const Value& get(const Key& key) const {
-        std::size_t idx = hash(key) % m_size;
+        std::size_t idx = hash(key) % m_buckets;
         const bucket& buck = m_data[idx];
         for(auto it=buck.begin(); it!=buck.end(); ++it) {
             if((*it).first() == key)
@@ -39,6 +51,7 @@ private:
     
 private:
     std::size_t m_size;
+    std::size_t m_buckets;
     float m_load_factor;
     dynamic_array<bucket> m_data;
 };
