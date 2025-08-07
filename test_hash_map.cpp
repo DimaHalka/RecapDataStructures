@@ -21,3 +21,17 @@ TEST(hash_map_test, update) {
     EXPECT_EQ(hm.size(), 1);
     EXPECT_EQ(hm.get("Dmytro Halka"), 5433550);
 }
+
+TEST(hash_map_test, insert_bulk) {
+    auto _key = [](int idx){
+        return "key-" + std::to_string(idx);
+    };
+    
+    hash_map<std::string, int> hm;
+    for(auto i = 0U; i<1024; i++)
+        hm.insert(_key(i), i);
+    
+    EXPECT_EQ(hm.size(), 1024);
+    for(auto i = 0U; i<1024; i++)
+        EXPECT_EQ(hm.get(_key(i)), i);
+}
