@@ -80,6 +80,16 @@ public:
         }
     }
 
+    [[nodiscard]] bool contains(const T& value) const noexcept {
+         const node* p = mp_root;
+         while (p) {
+             if (value == p->value) return true;
+             p = (value < p->value) ? p->left : p->right;
+         }
+         return false;
+    }
+     
+
 private:
     struct node {
         T value;
