@@ -6,16 +6,16 @@ template <typename T>
 class binary_search_tree {
 public:
     binary_search_tree()
-        : mp_head(nullptr)
+        : mp_root(nullptr)
         , m_size(0) {
     }
  
     ~binary_search_tree() noexcept {
-        if(!mp_head)
+        if(!mp_root)
             return;
         
         linked_list<node*> queue;
-        queue.push_back(mp_head);
+        queue.push_back(mp_root);
         while (!queue.empty()) {
             node* p = queue.pop_front();
             if(p->left)
@@ -25,7 +25,7 @@ public:
             delete p;
         }
         
-        mp_head = nullptr;
+        mp_root = nullptr;
         m_size = 0;
     }
     
@@ -50,13 +50,13 @@ public:
     }
     
     void add(const T& value) {
-        if(!mp_head) {
-            mp_head = new node(value);
+        if(!mp_root) {
+            mp_root = new node(value);
             m_size++;
             return;
         }
         
-        node* p_node = mp_head;
+        node* p_node = mp_root;
         while (p_node) {
             if(p_node->value == value) {
                 return;
@@ -93,6 +93,6 @@ private:
         }
     };
     
-    node* mp_head;
+    node* mp_root;
     std::size_t m_size;
 };
