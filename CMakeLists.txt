@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Library data_structures
 add_library(data_structures INTERFACE
+    binary_search_tree.hpp
     dynamic_array.hpp
     hash_map.hpp
     linked_list.hpp
@@ -28,6 +29,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 enable_testing()
 add_executable(unit_tests
+    test_binary_search_tree.cpp
     test_dynamic_array.cpp
     test_hash_map.cpp
     test_linked_list.cpp
