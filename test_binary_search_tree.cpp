@@ -17,7 +17,7 @@ TEST(binary_search_tree_test, add) {
     EXPECT_EQ(t.size(), 3);
 }
 
-TEST(binary_search_tree_test, is_there) {
+TEST(binary_search_tree_test, contains) {
     binary_search_tree<int> t;
     t.add(10);
     t.add(20);
@@ -26,4 +26,64 @@ TEST(binary_search_tree_test, is_there) {
     EXPECT_TRUE(t.contains(20));
     EXPECT_TRUE(t.contains(5));
     EXPECT_FALSE(t.contains(30));
+}
+
+TEST(binary_search_tree_test, copy_ctor) {
+    binary_search_tree<int> t;
+    t.add(100);
+    t.add(200);
+    t.add(50);
+    t.add(25);
+    t.add(75);
+    
+    binary_search_tree<int> copy(t);
+    EXPECT_EQ(copy.size(), 5);
+    EXPECT_TRUE(copy.contains(100));
+    EXPECT_TRUE(copy.contains(200));
+    EXPECT_TRUE(copy.contains(50));
+    EXPECT_TRUE(copy.contains(25));
+    EXPECT_TRUE(copy.contains(75));
+}
+
+TEST(binary_search_tree_test, assign_op) {
+    binary_search_tree<int> t0;
+    t0.add(100);
+    t0.add(200);
+    t0.add(50);
+    t0.add(25);
+    t0.add(75);
+    
+    binary_search_tree<int> copy = t0;
+    EXPECT_EQ(copy.size(), 5);
+    EXPECT_TRUE(copy.contains(100));
+    EXPECT_TRUE(copy.contains(200));
+    EXPECT_TRUE(copy.contains(50));
+    EXPECT_TRUE(copy.contains(25));
+    EXPECT_TRUE(copy.contains(75));
+}
+
+TEST(binary_search_tree_test, compare_op) {
+    binary_search_tree<int> t0;
+
+    binary_search_tree<int> t1;
+    t1.add(100);
+    t1.add(200);
+    t1.add(50);
+    t1.add(25);
+    t1.add(75);
+
+    binary_search_tree<int> t2;
+    t2.add(100);
+
+    binary_search_tree<int> t3;
+    t2.add(0);
+
+    binary_search_tree<int> copy = t1;
+    
+    bool b1 = (t1 == copy);
+    
+    EXPECT_TRUE(t1 == copy);
+    EXPECT_FALSE(t1 == t0);
+    EXPECT_FALSE(t1 == t2);
+    EXPECT_FALSE(t1 == t3);    
 }

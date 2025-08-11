@@ -11,30 +11,47 @@ public:
     }
  
     ~binary_search_tree() noexcept {
-        if(!mp_root)
-            return;
-        
-        linked_list<node*> queue;
-        queue.push_back(mp_root);
-        while (!queue.empty()) {
-            node* p = queue.pop_front();
-            if(p->left)
-                queue.push_back(p->left);
-            if(p->right)
-                queue.push_back(p->right);
-            delete p;
-        }
-        
+        std::function<void(node*)> recursive_delete;
+        recursive_delete = [&](node* p_node){
+            if(p_node){
+                recursive_delete(p_node->left);
+                recursive_delete(p_node->right);
+                delete p_node;
+            }
+        };
+        recursive_delete(mp_root);
         mp_root = nullptr;
         m_size = 0;
     }
     
-    binary_search_tree(const binary_search_tree&) {
-        throw 0; // copy ctor
+    binary_search_tree(const binary_search_tree& other)
+        : mp_root(nullptr)
+        , m_size(0)
+    {
+        std::function<node*(node*)> recursive_clone;
+        recursive_clone = [&](node* p_source_node) -> node* {
+            if(p_source_node) {
+                node* p_new_node = new node(p_source_node->value);
+                p_new_node->left = recursive_clone(p_source_node->left);
+                p_new_node->right = recursive_clone(p_source_node->right);
+                return p_new_node;
+            }
+            else {
+                return nullptr;
+            }
+        };
+        mp_root = recursive_clone(other.mp_root);
+        m_size = other.m_size;
     }
 
-    binary_search_tree& operator=(const binary_search_tree&) {
-        throw 0; // assignment operator
+    binary_search_tree& operator=(const binary_search_tree& other) {
+        if(this != *other){
+            binary_search_tree bst(other);
+            std::swap(this->mp_root, bst.mp_root);
+            std::swap(this->m_size, bst.m_size);
+        }
+        
+        return *this;
     }
 
     binary_search_tree(binary_search_tree&&) {
@@ -43,6 +60,26 @@ public:
 
     binary_search_tree& operator=(binary_search_tree&&) {
         throw 0; // move op
+    }
+    
+    bool operator==(const binary_search_tree& other) const noexcept {
+        std::function<bool(const node*, const node*)> recursive_compare;
+        recursive_compare = [&](const node* p_node1, const node* p_node2) -> bool {
+            if(!p_node1 && !p_node2)
+                return true;
+            if(p_node1 && !p_node2)
+                return false;
+            if(!p_node1 && p_node2)
+                return false;
+            if(p_node1->value != p_node2->value)
+                return false;
+            if(!recursive_compare(p_node1->left, p_node2->left))
+                return false;
+            if(!recursive_compare(p_node1->right, p_node2->right))
+                return false;
+            return true;            
+        };
+        return recursive_compare(mp_root, other.mp_root);
     }
     
     size_t size() const noexcept {
@@ -87,6 +124,9 @@ public:
              p = (value < p->value) ? p->left : p->right;
          }
          return false;
+    }
+    
+    void remove(const T& value) {
     }
      
 
