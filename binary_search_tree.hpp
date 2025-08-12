@@ -133,7 +133,8 @@ public:
         throw 0; // remove
     }
     
-    void traverse_bfs(std::function<void(const T&)> func) const {
+    template<typename Func>
+    void traverse_bfs(Func&& func) const {
         if(!mp_root)
             return;
         
@@ -149,7 +150,8 @@ public:
         }
     }
      
-    void traverse_inorder(std::function<void(const T&)> func) const {
+    template<typename Func>
+    void traverse_inorder(Func&& func) const {
         std::function<void(const node*)> _traverse;
         _traverse = [&](const node* p_node){
             if(p_node) {
