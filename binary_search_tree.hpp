@@ -28,8 +28,9 @@ public:
         : mp_root(nullptr)
         , m_size(0)
     {
+        // TODO: if new throws existing nodes will leak, consider unique_ptr
         std::function<node*(node*)> recursive_clone;
-        recursive_clone = [&](node* p_source_node) -> node* {
+        recursive_clone = [&](const node* p_source_node) -> node* {
             if(p_source_node) {
                 node* p_new_node = new node(p_source_node->value);
                 p_new_node->left = recursive_clone(p_source_node->left);
@@ -49,7 +50,7 @@ public:
             binary_search_tree bst(other);
             std::swap(this->mp_root, bst.mp_root);
             std::swap(this->m_size, bst.m_size);
-        }        
+        }
         return *this;
     }
 
@@ -130,6 +131,9 @@ public:
     }
     
     void traverse_bfs(std::function<void(const T&)> func) const {
+        if(!mp_root)
+            return;
+        
         linked_list<node*> queue;
         queue.push_back(mp_root);
         while(!queue.empty()) {
@@ -142,7 +146,7 @@ public:
         }
     }
      
-    void traverse_inorder(std::function<void(const T&)> func){
+    void traverse_inorder(std::function<void(const T&)> func) const {
         std::function<void(const node*)> _traverse;
         _traverse = [&](const node* p_node){
             if(p_node) {
