@@ -53,7 +53,8 @@ TEST(binary_search_tree_test, assign_op) {
     t0.add(25);
     t0.add(75);
     
-    binary_search_tree<int> copy = t0;
+    binary_search_tree<int> copy;
+    copy = t0;
     EXPECT_EQ(copy.size(), 5);
     EXPECT_TRUE(copy.contains(100));
     EXPECT_TRUE(copy.contains(200));

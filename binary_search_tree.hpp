@@ -45,12 +45,11 @@ public:
     }
 
     binary_search_tree& operator=(const binary_search_tree& other) {
-        if(this != *other){
+        if(this != &other){
             binary_search_tree bst(other);
             std::swap(this->mp_root, bst.mp_root);
             std::swap(this->m_size, bst.m_size);
-        }
-        
+        }        
         return *this;
     }
 
