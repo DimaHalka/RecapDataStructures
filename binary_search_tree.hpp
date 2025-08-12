@@ -127,9 +127,34 @@ public:
     }
     
     void remove(const T& value) {
+        throw 0; // remove
+    }
+    
+    void traverse_bfs(std::function<void(const T&)> func) const {
+        linked_list<node*> queue;
+        queue.push_back(mp_root);
+        while(!queue.empty()) {
+            node* p_node = queue.pop_back();
+            if(p_node->left)
+                queue.push_back(p_node->left);
+            if(p_node->right)
+                queue.push_back(p_node->right);
+            func(p_node->value);
+        }
     }
      
-
+    void traverse_inorder(std::function<void(const T&)> func){
+        std::function<void(const node*)> _traverse;
+        _traverse = [&](const node* p_node){
+            if(p_node) {
+                _traverse(p_node->left);
+                func(p_node->value);
+                _traverse(p_node->right);
+            }
+        };
+        _traverse(mp_root);
+    }
+ 
 private:
     struct node {
         T value;

@@ -87,3 +87,36 @@ TEST(binary_search_tree_test, compare_op) {
     EXPECT_FALSE(t1 == t2);
     EXPECT_FALSE(t1 == t3);    
 }
+
+TEST(binary_search_tree_test, traverse_bfs) {
+    binary_search_tree<int> t;
+    t.add(100);
+    t.add(200);
+    t.add(50);
+    t.add(25);
+    t.add(75);
+    
+    std::string str;
+    t.traverse_bfs([&](const int& value){
+        str += std::to_string(value) + " ";
+    });
+    std::string trimmed(str.c_str(), str.length()-1);
+    EXPECT_EQ(trimmed, "100 200 50 75 25");
+}
+
+TEST(binary_search_tree_test, traverse_inorder) {
+    binary_search_tree<int> t;
+    t.add(100);
+    t.add(200);
+    t.add(50);
+    t.add(25);
+    t.add(75);
+    
+    std::string str;
+    t.traverse_inorder([&](const int& value){
+        str += std::to_string(value) + " ";
+    });
+    std::string trimmed(str.c_str(), str.length()-1);
+    EXPECT_EQ(trimmed, "25 50 75 100 200");
+}
+
