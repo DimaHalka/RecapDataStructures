@@ -63,6 +63,9 @@ public:
     }
     
     bool operator==(const binary_search_tree& other) const noexcept {
+        if(m_size != other.m_size)
+            return false;
+        
         std::function<bool(const node*, const node*)> recursive_compare;
         recursive_compare = [&](const node* p_node1, const node* p_node2) -> bool {
             if(!p_node1 && !p_node2)
@@ -137,7 +140,7 @@ public:
         linked_list<node*> queue;
         queue.push_back(mp_root);
         while(!queue.empty()) {
-            node* p_node = queue.pop_back();
+            node* p_node = queue.pop_front();
             if(p_node->left)
                 queue.push_back(p_node->left);
             if(p_node->right)

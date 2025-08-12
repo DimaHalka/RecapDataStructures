@@ -102,7 +102,7 @@ TEST(binary_search_tree_test, traverse_bfs) {
         str += std::to_string(value) + " ";
     });
     std::string trimmed(str.c_str(), str.length()-1);
-    EXPECT_EQ(trimmed, "100 200 50 75 25");
+    EXPECT_EQ(trimmed, "100 50 200 25 75");
 }
 
 TEST(binary_search_tree_test, traverse_inorder) {
