@@ -42,7 +42,7 @@ private:
         return std::hash<Key>{}(key);
     }
     
-    std::size_t _rehash() {
+    void _rehash() {
         dynamic_array<bucket> new_buckets;
         new_buckets.resize(m_buckets.size() * 2);
         for(std::size_t idx = 0U; idx < m_buckets.size(); idx++) {
