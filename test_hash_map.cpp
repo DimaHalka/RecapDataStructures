@@ -3,7 +3,6 @@
 #include "hash_map.hpp"
 
 
-
 TEST(hash_map_test, empty) {
     hash_map<std::string, int> hm;
 }
