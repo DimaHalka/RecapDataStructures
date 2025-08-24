@@ -1,6 +1,7 @@
 #pragma once
 
 #include "linked_list.hpp"
+#include "pair.hpp"
 
 template <typename T>
 class binary_search_tree {
@@ -129,9 +130,73 @@ public:
          return false;
     }
     
-    void remove(const T& value) {
-        throw 0; // remove
+    bool remove(const T& value) {
+        node* parent = nullptr;
+        node* cur = mp_root;
+        bool is_right = false;
+
+        while (cur && cur->value != value) {
+            parent = cur;
+            if (value < cur->value) {
+                is_right = false;
+                cur = cur->left;
+            } else {
+                is_right = true;
+                cur = cur->right;
+            }
+        }
+        if (!cur) return false;
+
+        auto relink_parent = [&](node* new_child) {
+            if (!parent) {
+                mp_root = new_child;
+            } else if (is_right) {
+                parent->right = new_child;
+            } else {
+                parent->left = new_child;
+            }
+        };
+
+        if (!cur->left && !cur->right) {
+            relink_parent(nullptr);
+            delete cur;
+            --m_size;
+            return true;
+        }
+        if (!cur->left) {
+            relink_parent(cur->right);
+            delete cur;
+            --m_size;
+            return true;
+        }
+        if (!cur->right) {
+            relink_parent(cur->left);
+            delete cur;
+            --m_size;
+            return true;
+        }
+
+        node* succ_parent = cur;
+        node* succ = cur->right;
+        bool succ_is_right = true;
+        while (succ->left) {
+            succ_parent = succ;
+            succ = succ->left;
+            succ_is_right = false;
+        }
+
+        cur->value = succ->value;
+        node* succ_child = succ->right;
+        if (succ_is_right) {
+            succ_parent->right = succ_child;
+        } else {
+            succ_parent->left = succ_child;
+        }
+        delete succ;
+        --m_size;
+        return true;
     }
+
     
     template<typename Func>
     void traverse_bfs(Func&& func) const {
