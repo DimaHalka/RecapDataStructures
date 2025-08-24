@@ -42,4 +42,8 @@ target_link_libraries(unit_tests
     data_structures
 )
 include(GoogleTest)
-add_test(NAME DynamicArrayTest COMMAND unit_tests)
+
+gtest_discover_tests(unit_tests
+  DISCOVERY_MODE PRE_TEST
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
