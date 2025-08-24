@@ -42,4 +42,12 @@ target_link_libraries(unit_tests
     data_structures
 )
 include(GoogleTest)
-add_test(NAME DynamicArrayTest COMMAND unit_tests)
+
+
+add_test(NAME binary_search_tree_test COMMAND unit_tests)
+add_test(NAME dynamic_array_test COMMAND unit_tests)
+add_test(NAME hash_map_test COMMAND unit_tests)
+add_test(NAME linked_list COMMAND unit_tests)
+add_test(NAME min_heap_test COMMAND unit_tests)
+add_test(NAME pair_test COMMAND unit_tests)
+add_test(NAME stack_test COMMAND unit_tests)
